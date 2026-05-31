@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>提问工作台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Question Foundry</p>
+        <h1>提问工作台</h1>
+        <p class="hero-text">
+          把零散需求整理成更容易得到高质量回应的输入。现在除了提问优化和编辑创作，你还可以切到软件编写模式，把想法整理成可直接交给 AI 开发助手的软件需求、开发蓝图、项目目录结构和平台专用提示词。
+        </p>
+      </div>
+
+      <div class="hero-panel">
+        <p class="panel-label">多模式工作台</p>
+        <p id="mode-indicator" class="mode-pill">提问优化模式</p>
+        <div class="template-row">
+          <button class="template-chip is-active" type="button" data-template="study">学习辅导</button>
+          <button class="template-chip" type="button" data-template="writing">写作润色</button>
+          <button class="template-chip" type="button" data-template="coding">代码排错</button>
+          <button class="template-chip" type="button" data-template="decision">方案对比</button>
+          <button class="template-chip" type="button" data-template="creative">编辑创作</button>
+          <button class="template-chip" type="button" data-template="software">软件编写</button>
+        </div>
+        <p id="panel-tip" class="panel-tip">切换模板会替换占位提示，不会清空你已经输入的内容。</p>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="composer card">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">01</p>
+            <h2 id="composer-title">组织你的需求</h2>
+          </div>
+          <div class="status-badge">
+            <span>完整度</span>
+            <strong id="clarity-value">18%</strong>
+          </div>
+        </div>
+
+        <form id="question-form" class="question-form" autocomplete="off">
+          <label class="field">
+            <span id="goal-label">你想解决什么？</span>
+            <textarea id="goal" rows="4" placeholder=""></textarea>
+          </label>
+
+          <div class="grid two-up">
+            <label class="field">
+              <span id="context-label">已有背景</span>
+              <textarea id="context" rows="4" placeholder=""></textarea>
+            </label>
+
+            <label class="field">
+              <span id="materials-label">关键材料</span>
+              <textarea id="materials" rows="4" placeholder=""></textarea>
+            </label>
+          </div>
+
+          <div class="grid two-up">
+            <label class="field">
+              <span id="constraints-label">限制条件</span>
+              <textarea id="constraints" rows="4" placeholder=""></textarea>
+            </label>
+
+            <label class="field">
+              <span id="attempts-label">你已经试过什么？</span>
+              <textarea id="attempts" rows="4" placeholder=""></textarea>
+            </label>
+          </div>
+
+          <section id="creative-studio" class="special-studio" hidden>
+            <div class="studio-head">
+              <div>
+                <p class="section-kicker">Creative Bench</p>
+                <h3>编辑创作工位</h3>
+              </div>
+              <span class="studio-badge">创作功能</span>
+            </div>
+
+            <div class="grid two-up">
+              <label class="field">
+                <span>交付物类型</span>
+                <select id="creative-deliverable">
+                  <option value="章节续写">章节续写</option>
+                  <option value="片段改写">片段改写</option>
+                  <option value="大纲扩展">大纲扩展</option>
+                  <option value="人物设定">人物设定</option>
+                  <option value="宣传文案">宣传文案</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>当前阶段</span>
+                <select id="creative-stage">
+                  <option value="立项">立项</option>
+                  <option value="起稿">起稿</option>
+                  <option value="精修">精修</option>
+                  <option value="交稿前">交稿前</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="field">
+              <span>原稿片段或已有提纲</span>
+              <textarea id="draft" rows="6" placeholder="贴一段原稿、章节提纲、角色小传，或你已经写到一半的内容。"></textarea>
+            </label>
+
+            <div class="grid two-up">
+              <label class="field">
+                <span>编辑强度</span>
+                <input id="creative-intensity" type="range" min="1" max="5" value="3">
+                <div class="range-labels">
+                  <span>轻编辑</span>
+                  <strong id="creative-intensity-label">平衡调整</strong>
+                  <span>重构改写</span>
+                </div>
+              </label>
+
+              <div class="field">
+                <span>重点打磨</span>
+                <div id="creative-focus" class="tag-grid">
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="节奏">节奏</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="角色">角色</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="对白">对白</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="情绪">情绪</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="画面">画面</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="结构">结构</button>
+                  <button class="toggle-tag creative-focus-tag" type="button" data-focus="商业感">商业感</button>
+                </div>
+                <p class="helper-text">勾选越具体，生成的工单越像内容编辑给你的下一轮工作。</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="software-studio" class="special-studio" hidden>
+            <div class="studio-head">
+              <div>
+                <p class="section-kicker">Build Bench</p>
+                <h3>软件编写工位</h3>
+              </div>
+              <span class="studio-badge">开发功能</span>
+            </div>
+
+            <div class="grid two-up">
+              <label class="field">
+                <span>交付形式</span>
+                <select id="software-product">
+                  <option value="Web 应用">Web 应用</option>
+                  <option value="桌面软件">桌面软件</option>
+                  <option value="移动 App">移动 App</option>
+                  <option value="管理后台">管理后台</option>
+                  <option value="自动化脚本">自动化脚本</option>
+                  <option value="小工具">小工具</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>目标平台</span>
+                <select id="software-platform">
+                  <option value="Windows">Windows</option>
+                  <option value="Web 浏览器">Web 浏览器</option>
+                  <option value="Android / iOS">Android / iOS</option>
+                  <option value="跨平台">跨平台</option>
+                  <option value="服务器环境">服务器环境</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="grid two-up">
+              <label class="field">
+                <span>开发阶段</span>
+                <select id="software-stage">
+                  <option value="MVP 验证">MVP 验证</option>
+                  <option value="可用版本">可用版本</option>
+                  <option value="上线版本">上线版本</option>
+                  <option value="长期迭代">长期迭代</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>技术栈偏好</span>
+                <input id="software-stack" type="text" placeholder="例如：React + Electron + SQLite">
+              </label>
+            </div>
+
+            <label class="field">
+              <span>核心模块 / 页面 / 流程</span>
+              <textarea id="software-modules" rows="5" placeholder="例如：登录页、项目列表、编辑页、导出功能、设置页。也可以写成用户操作流程。"></textarea>
+            </label>
+
+            <label class="field">
+              <span>数据、接口或外部集成</span>
+              <textarea id="software-integrations" rows="5" placeholder="例如：本地 SQLite 存储、导出 Word、调用 OpenAI API、读取 Excel。"></textarea>
+            </label>
+
+            <div class="grid two-up">
+              <label class="field">
+                <span>实现力度</span>
+                <input id="software-scope" type="range" min="1" max="5" value="3">
+                <div class="range-labels">
+                  <span>先做 MVP</span>
+                  <strong id="software-scope-label">平衡实现</strong>
+                  <span>尽量完整</span>
+                </div>
+              </label>
+
+              <div class="field">
+                <span>重点关注</span>
+                <div id="software-focus" class="tag-grid">
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="界面">界面</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="流程">流程</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="数据">数据</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="权限">权限</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="性能">性能</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="部署">部署</button>
+                  <button class="toggle-tag software-focus-tag" type="button" data-focus="可维护性">可维护性</button>
+                </div>
+                <p class="helper-text">这些会直接影响生成的开发蓝图、目录结构建议和验收清单。</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="grid compact">
+            <label class="field">
+              <span>回答深度</span>
+              <input id="depth" type="range" min="1" max="5" value="3">
+              <div class="range-labels">
+                <span>极简</span>
+                <strong id="depth-label">平衡</strong>
+                <span>深入</span>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>预期风格</span>
+              <select id="tone">
+                <option value="直接、明确、少废话">直接、明确、少废话</option>
+                <option value="像老师一样分步骤讲清楚">像老师一样分步骤讲清楚</option>
+                <option value="像资深产品经理和工程师一样，先判断再给方案">像资深产品经理和工程师一样，先判断再给方案</option>
+                <option value="专业一点，并说明你的判断依据">专业一点，并说明你的判断依据</option>
+                <option value="友好一点，方便我马上执行">友好一点，方便我马上执行</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field">
+            <span>希望回答包含什么？</span>
+            <div id="answer-tags" class="tag-grid">
+              <button class="toggle-tag is-selected" type="button" data-tag="分步骤方案">分步骤方案</button>
+              <button class="toggle-tag is-selected" type="button" data-tag="先给核心结论">先给核心结论</button>
+              <button class="toggle-tag" type="button" data-tag="举例说明">举例说明</button>
+              <button class="toggle-tag" type="button" data-tag="表格对比">表格对比</button>
+              <button class="toggle-tag" type="button" data-tag="可直接复制模板">可直接复制模板</button>
+              <button class="toggle-tag" type="button" data-tag="指出常见误区">指出常见误区</button>
+              <button class="toggle-tag" type="button" data-tag="提供改写稿">提供改写稿</button>
+              <button class="toggle-tag" type="button" data-tag="标出删改位">标出删改位</button>
+              <button class="toggle-tag" type="button" data-tag="给出目录结构">给出目录结构</button>
+              <button class="toggle-tag" type="button" data-tag="给出验收标准">给出验收标准</button>
+              <button class="toggle-tag" type="button" data-tag="列出接口设计">列出接口设计</button>
+            </div>
+          </div>
+        </form>
+
+        <section class="assist-panel">
+          <div>
+            <p class="section-kicker">02</p>
+            <h3 id="suggestions-title">输入提升建议</h3>
+          </div>
+          <ul id="suggestions" class="suggestions-list"></ul>
+        </section>
+      </section>
+
+      <aside class="preview card">
+        <div class="section-head preview-head">
+          <div>
+            <p class="section-kicker">03</p>
+            <h2 id="preview-title">生成后的提问</h2>
+          </div>
+          <button id="copy-button" class="primary-btn" type="button">复制内容</button>
+        </div>
+
+        <div class="preview-box">
+          <pre id="preview-output"></pre>
+        </div>
+
+        <div class="insight-grid">
+          <section class="mini-card">
+            <p class="mini-label">当前方向</p>
+            <p id="summary-line" class="mini-value">先填写左侧内容。</p>
+          </section>
+          <section class="mini-card">
+            <p class="mini-label">建议补充</p>
+            <p id="missing-line" class="mini-value">目标、背景、限制至少填两项会更稳。</p>
+          </section>
+        </div>
+
+        <div class="preview-actions">
+          <button id="compact-button" class="ghost-btn" type="button">切换精简版</button>
+          <button id="reset-button" class="ghost-btn" type="button">清空内容</button>
+        </div>
+
+        <section id="creative-output" class="special-output" hidden>
+          <div class="copy-row">
+            <div>
+              <p class="section-kicker">04</p>
+              <h3>编辑创作工单</h3>
+            </div>
+            <button id="copy-creative-button" class="ghost-btn" type="button">复制工单</button>
+          </div>
+
+          <div class="detail-grid">
+            <section class="mini-card detail-card detail-card-wide">
+              <p class="mini-label">创作路线</p>
+              <pre id="creative-plan" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">改写提示</p>
+              <pre id="creative-prompt" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">检查清单</p>
+              <ul id="creative-checklist" class="checklist"></ul>
+            </section>
+          </div>
+        </section>
+
+        <section id="software-output" class="special-output" hidden>
+          <div class="copy-row">
+            <div>
+              <p class="section-kicker">05</p>
+              <h3>软件开发工单</h3>
+            </div>
+            <button id="copy-software-button" class="ghost-btn" type="button">复制工单</button>
+          </div>
+
+          <div class="detail-grid">
+            <section class="mini-card detail-card detail-card-wide">
+              <p class="mini-label">开发蓝图</p>
+              <pre id="software-plan" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card detail-card-wide">
+              <p class="mini-label">项目目录结构</p>
+              <pre id="software-structure" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">通用编程提示词</p>
+              <pre id="software-prompt" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">验收清单</p>
+              <ul id="software-checklist" class="checklist"></ul>
+            </section>
+          </div>
+
+          <div class="agent-grid">
+            <section class="mini-card detail-card">
+              <p class="mini-label">Codex 提示词</p>
+              <pre id="software-codex-prompt" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">Cursor 提示词</p>
+              <pre id="software-cursor-prompt" class="detail-pre"></pre>
+            </section>
+
+            <section class="mini-card detail-card">
+              <p class="mini-label">ChatGPT 提示词</p>
+              <pre id="software-chatgpt-prompt" class="detail-pre"></pre>
+            </section>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
